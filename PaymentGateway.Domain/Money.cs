@@ -1,4 +1,7 @@
-﻿namespace PaymentGateway.Domain
+﻿using System;
+using System.Text.RegularExpressions;
+
+namespace PaymentGateway.Domain
 {
     /// <summary>
     /// Represents a decimal amount in a specified currency.
@@ -8,11 +11,19 @@
     /// </remarks>
     public class Money
     {
+        private static Regex currencyRegex = new Regex(@"^[A-Z]{3}$");
+
         public Money(decimal amount, string currency)
         {
             if (currency == null)
             {
                 throw new System.ArgumentNullException(nameof(currency));
+            }
+
+            // Here we are doing some basic validation of the currency code - should be properly done against https://en.wikipedia.org/wiki/ISO_4217
+            if (!currencyRegex.IsMatch(currency))
+            {
+                throw new ArgumentException("Invalid currency code", "currency");
             }
 
             this.Amount = amount;

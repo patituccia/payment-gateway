@@ -20,7 +20,7 @@ namespace PaymentGateway.Domain
             this.mediator = mediator;
         }
 
-        public PaymentRequest Create(string cardNumber, DateTime expiryDate, Money money, int cVV)
+        public PaymentRequest Create(string cardNumber, DateTime expiryDate, Money money, string cVV)
         {
             if (string.IsNullOrEmpty(cardNumber))
             {
@@ -32,12 +32,14 @@ namespace PaymentGateway.Domain
                 throw new ArgumentNullException(nameof(money));
             }
 
-            if (!CardNumber.IsMatch(cardNumber))
+            // TODO: Here we perform just some basic validation on the CC number which should be replaced with a validation class/service.
+            var sanitisedCardNumber = cardNumber.Replace(" ", string.Empty);
+            if (!CardNumber.IsMatch(sanitisedCardNumber))
             {
                 throw new ArgumentException("Card number is invalid.", "cardNumber");
             }
 
-            return new PaymentRequest(this.acquiringBank, this.mediator, cardNumber, expiryDate, money, cVV);
+            return new PaymentRequest(this.acquiringBank, this.mediator, sanitisedCardNumber, expiryDate, money, cVV);
         }
     }
 }

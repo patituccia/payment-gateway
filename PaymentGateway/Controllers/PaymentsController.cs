@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using PaymentGateway.Domain;
 using PaymentGateway.Models;
+using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
 
 namespace PaymentGateway.Controllers
@@ -35,7 +36,7 @@ namespace PaymentGateway.Controllers
         }
         
         [HttpGet]
-        public async Task<ActionResult<PaymentDto>> Find(string acquiringBankId)
+        public async Task<ActionResult<PaymentDto>> Find([Required]string acquiringBankId)
         {
             var payment = await this.paymentFinder.Find(acquiringBankId);
 

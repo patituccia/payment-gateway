@@ -14,7 +14,7 @@ namespace PaymentGateway.Domain
         private readonly IMediator mediator;
         private bool isProcessed = false;
 
-        internal PaymentRequest(IAcquiringBank acquiringBank, IMediator mediator, string cardNumber, DateTime expiryDate, Money money, int cVV)
+        internal PaymentRequest(IAcquiringBank acquiringBank, IMediator mediator, string cardNumber, DateTime expiryDate, Money money, string cVV)
         {
             if (string.IsNullOrEmpty(cardNumber))
             {
@@ -35,7 +35,7 @@ namespace PaymentGateway.Domain
 
         public Money Money { get; }
 
-        public int CVV { get; }
+        public string CVV { get; }
 
         public async Task<Payment> Process()
         {
