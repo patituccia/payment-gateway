@@ -1,7 +1,6 @@
 ﻿using MediatR;
-using PaymentGateway.Domain.Events;
 using System;
-using System.Threading.Tasks;
+using System.Text.RegularExpressions;
 
 namespace PaymentGateway.Domain
 {
@@ -10,23 +9,31 @@ namespace PaymentGateway.Domain
     /// </summary>
     public class PaymentRequest
     {
-        private readonly IAcquiringBank acquiringBank;
-        private readonly IMediator mediator;
-        private bool isProcessed = false;
+        private static Regex CardNumberRegex = new Regex(@"\d{16}");
 
-        internal PaymentRequest(IAcquiringBank acquiringBank, IMediator mediator, string cardNumber, DateTime expiryDate, Money money, string cVV)
+        public PaymentRequest(string cardNumber, DateTime expiryDate, Money money, string cVV)
         {
             if (string.IsNullOrEmpty(cardNumber))
             {
                 throw new ArgumentException($"'{nameof(cardNumber)}' cannot be null or empty", nameof(cardNumber));
             }
 
+            if (money is null)
+            {
+                throw new ArgumentNullException(nameof(money));
+            }
+
+            // TODO: Here we perform just some basic validation on the CC number which should be replaced with a validation class/service.
+            var sanitisedCardNumber = cardNumber.Replace(" ", string.Empty);
+            if (!CardNumberRegex.IsMatch(sanitisedCardNumber))
+            {
+                throw new ArgumentException("Card number is invalid.", "cardNumber");
+            }
+
             this.CardNumber = cardNumber;
             this.ExpiryDate = expiryDate;
             this.Money = money ?? throw new ArgumentNullException(nameof(money));
             this.CVV = cVV;
-            this.acquiringBank = acquiringBank ?? throw new ArgumentNullException(nameof(acquiringBank));
-            this.mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
         }
 
         public string CardNumber { get; }
@@ -37,19 +44,6 @@ namespace PaymentGateway.Domain
 
         public string CVV { get; }
 
-        public async Task<Payment> Process()
-        {
-            if (this.isProcessed)
-            {
-                throw new InvalidOperationException("Request have been processed already.");
-            }
-
-            var response = await this.acquiringBank.Process(this);
-            var payment = await this.mediator.Send(new SavePayment(this, response));
-
-            this.isProcessed = true;
-
-            return payment;
-        }
+        public bool IsProcessed { get; internal set; } = false;
     }
 }

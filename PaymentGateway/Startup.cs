@@ -24,7 +24,7 @@ namespace PaymentGateway
         {
             services.AddControllers();
 
-            services.AddMediatR(typeof(IPaymentRequestFactory));
+            services.AddMediatR(typeof(IPaymentRequestProcessor));
             services.AddMediatR(typeof(MockPaymentRepository));
 
             services.AddSwaggerGen();

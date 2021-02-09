@@ -7,7 +7,7 @@ namespace Microsoft.Extensions.DependencyInjection
         public static void AddPaymentGatewayDomain(this IServiceCollection services)
         {
             services.AddScoped<IPaymentFinder, PaymentFinder>();
-            services.AddScoped<IPaymentRequestFactory, PaymentRequestFactory>();
+            services.AddScoped<IPaymentRequestProcessor, PaymentRequestProcessor>();
         }
     }
 }

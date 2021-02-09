@@ -13,25 +13,25 @@ namespace PaymentGateway.Controllers
     [ApiController]
     public class PaymentsController : ControllerBase
     {
-        private readonly IPaymentRequestFactory paymentRequestFactory;
+        private readonly IPaymentRequestProcessor paymentRequestProcessor;
         private readonly IPaymentFinder paymentFinder;
 
-        public PaymentsController(IPaymentRequestFactory paymentRequestFactory, IPaymentFinder paymentFinder)
+        public PaymentsController(IPaymentRequestProcessor paymentRequestProcessor, IPaymentFinder paymentFinder)
         {
-            this.paymentRequestFactory = paymentRequestFactory;
+            this.paymentRequestProcessor = paymentRequestProcessor;
             this.paymentFinder = paymentFinder;
         }
 
         [HttpPost]
         public async Task<PaymentResponseDto> Process(PaymentRequestDto paymentRequestDto)
         {
-            var paymentRequest = this.paymentRequestFactory.Create(
+            var paymentRequest = new PaymentRequest(
                 paymentRequestDto.CardNumber,
                 paymentRequestDto.ExpiryDate,
                 new Money(paymentRequestDto.Amount, paymentRequestDto.Currency),
                 paymentRequestDto.CVV);
 
-            var payment = await paymentRequest.Process();
+            var payment = await paymentRequestProcessor.Process(paymentRequest);
 
             var result = new PaymentResponseDto { AcquiringBankId = payment.AcquiringBankIdentifier, Status = payment.Status.ToString() };
 
