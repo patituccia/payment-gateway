@@ -23,7 +23,7 @@ namespace PaymentGateway.Controllers
         }
 
         [HttpPost]
-        public async Task<PaymentResponseDto> Process(PaymentRequestDto paymentRequestDto)
+        public async Task<ActionResult<PaymentResponseDto>> Process(PaymentRequestDto paymentRequestDto)
         {
             var paymentRequest = new PaymentRequest(
                 paymentRequestDto.CardNumber,
@@ -35,9 +35,9 @@ namespace PaymentGateway.Controllers
 
             var result = new PaymentResponseDto { AcquiringBankId = payment.AcquiringBankIdentifier, Status = payment.Status.ToString() };
 
-            return result;
+            return this.Ok(result);
         }
-        
+
         [HttpGet]
         public async Task<ActionResult<PaymentDto>> Find([Required]string acquiringBankId)
         {
@@ -57,7 +57,7 @@ namespace PaymentGateway.Controllers
                 Status = payment.Status.ToString()
             };
 
-            return result;
+            return this.Ok(result);
         }
     }
 }

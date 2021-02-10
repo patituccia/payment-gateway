@@ -30,7 +30,7 @@ namespace PaymentGateway.Domain
                 throw new ArgumentException("Card number is invalid.", "cardNumber");
             }
 
-            this.CardNumber = cardNumber;
+            this.CardNumber = sanitisedCardNumber;
             this.ExpiryDate = expiryDate;
             this.Money = money ?? throw new ArgumentNullException(nameof(money));
             this.CVV = cVV;
