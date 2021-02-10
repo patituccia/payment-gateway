@@ -1,5 +1,4 @@
-﻿using MediatR;
-using System;
+﻿using System;
 using System.Text.RegularExpressions;
 
 namespace PaymentGateway.Domain
@@ -11,8 +10,13 @@ namespace PaymentGateway.Domain
     {
         private static Regex CardNumberRegex = new Regex(@"\d{16}");
 
-        public PaymentRequest(string cardNumber, DateTime expiryDate, Money money, string cVV)
+        public PaymentRequest(int merchantId, string cardHolderName, string cardNumber, DateTime expiryDate, Money money, string cVV)
         {
+            if (string.IsNullOrEmpty(cardHolderName))
+            {
+                throw new ArgumentException($"'{nameof(cardHolderName)}' cannot be null or empty", nameof(cardHolderName));
+            }
+
             if (string.IsNullOrEmpty(cardNumber))
             {
                 throw new ArgumentException($"'{nameof(cardNumber)}' cannot be null or empty", nameof(cardNumber));
@@ -30,11 +34,17 @@ namespace PaymentGateway.Domain
                 throw new ArgumentException("Card number is invalid.", "cardNumber");
             }
 
+            this.MerchantId = merchantId;
+            this.CardHolderName = cardHolderName;
             this.CardNumber = sanitisedCardNumber;
             this.ExpiryDate = expiryDate;
             this.Money = money ?? throw new ArgumentNullException(nameof(money));
             this.CVV = cVV;
         }
+
+        public int MerchantId { get; }
+
+        public string CardHolderName { get; }
 
         public string CardNumber { get; }
 

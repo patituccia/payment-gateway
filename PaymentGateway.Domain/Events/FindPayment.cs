@@ -2,18 +2,24 @@
 
 namespace PaymentGateway.Domain.Events
 {
+    /// <summary>
+    /// Domain event (request) for a Payment with a specified Acquiring Bank Payment Id.
+    /// </summary>
+    /// <remarks>
+    /// Implementers should return null if Payment not found.
+    /// </remarks>
     public class FindPayment : IRequest<Payment>
     {
-        public FindPayment(string acquiringBankIdentifier)
+        public FindPayment(string acquiringBankPaymentId)
         {
-            if (string.IsNullOrEmpty(acquiringBankIdentifier))
+            if (string.IsNullOrEmpty(acquiringBankPaymentId))
             {
-                throw new System.ArgumentException($"'{nameof(acquiringBankIdentifier)}' cannot be null or empty", nameof(acquiringBankIdentifier));
+                throw new System.ArgumentException($"'{nameof(acquiringBankPaymentId)}' cannot be null or empty", nameof(acquiringBankPaymentId));
             }
 
-            this.AcquiringBankIdentifier = acquiringBankIdentifier;
+            this.AcquiringPaymentBankId = acquiringBankPaymentId;
         }
 
-        public string AcquiringBankIdentifier { get; }
+        public string AcquiringPaymentBankId { get; }
     }
 }

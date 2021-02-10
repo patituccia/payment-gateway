@@ -26,6 +26,8 @@ namespace PaymentGateway.Controllers
         public async Task<ActionResult<PaymentResponseDto>> Process(PaymentRequestDto paymentRequestDto)
         {
             var paymentRequest = new PaymentRequest(
+                paymentRequestDto.MerchantId,
+                paymentRequestDto.CardHolderName,
                 paymentRequestDto.CardNumber,
                 paymentRequestDto.ExpiryDate,
                 new Money(paymentRequestDto.Amount, paymentRequestDto.Currency),
@@ -33,15 +35,15 @@ namespace PaymentGateway.Controllers
 
             var payment = await paymentRequestProcessor.Process(paymentRequest);
 
-            var result = new PaymentResponseDto { AcquiringBankId = payment.AcquiringBankIdentifier, Status = payment.Status.ToString() };
+            var result = new PaymentResponseDto { AcquiringBankPaymentId = payment.AcquiringBankPaymentId, Status = payment.Status.ToString() };
 
             return this.Ok(result);
         }
 
         [HttpGet]
-        public async Task<ActionResult<PaymentDto>> Find([Required]string acquiringBankId)
+        public async Task<ActionResult<PaymentDto>> Find([Required]string acquiringBankPaymentId)
         {
-            var payment = await this.paymentFinder.Find(acquiringBankId);
+            var payment = await this.paymentFinder.Find(acquiringBankPaymentId);
 
             if (payment == null)
             {

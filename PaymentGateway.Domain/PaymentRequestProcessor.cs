@@ -29,6 +29,12 @@ namespace PaymentGateway.Domain
                 throw new InvalidOperationException("Request have been processed already.");
             }
 
+            var merchant = await this.mediator.Send(new FindMerchant(request.MerchantId));
+            if (merchant == null)
+            {
+                throw new InvalidOperationException($"Merchant with Id: {request.MerchantId} not found.");
+            }
+
             var response = await this.acquiringBank.Process(request);
             var payment = await this.mediator.Send(new SavePayment(request, response));
 

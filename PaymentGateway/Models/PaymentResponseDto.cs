@@ -5,7 +5,7 @@ namespace PaymentGateway.Models
     public class PaymentResponseDto
     {
         [Required]
-        public string AcquiringBankId { get; set; }
+        public string AcquiringBankPaymentId { get; set; }
 
         [Required]
         public string Status { get; set; }

@@ -6,6 +6,13 @@ namespace PaymentGateway.Models
     public class PaymentRequestDto
     {
         [Required]
+        [Range(0, int.MaxValue)]
+        public int MerchantId { get; set; }
+
+        [Required]
+        public string CardHolderName { get; set; }
+
+        [Required]
         [CreditCard]
         public string CardNumber { get; set; }
 

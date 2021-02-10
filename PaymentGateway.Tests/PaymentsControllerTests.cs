@@ -18,6 +18,8 @@ namespace PaymentGateway.Tests
             var paymentRequestProcessorSub = Substitute.For<IPaymentRequestProcessor>();
             var paymentRequestDto = new PaymentRequestDto
             {
+                MerchantId = 0,
+                CardHolderName = "John Smith",
                 CardNumber = "1234 1234 1234 1234",
                 Amount = 100.00M,
                 Currency = "GBP",
@@ -25,10 +27,10 @@ namespace PaymentGateway.Tests
                 ExpiryDate = DateTime.Now
             };
             var money = new Money(paymentRequestDto.Amount, paymentRequestDto.Currency);
-            var acquiringBankId = Guid.NewGuid().ToString();
+            var acquiringBankPaymentId = Guid.NewGuid().ToString();
             paymentRequestProcessorSub
                 .Process(Arg.Is<PaymentRequest>(p => p.CardNumber == paymentRequestDto.CardNumber.Replace(" ", string.Empty)))
-                .Returns(Task.FromResult(new Payment(1, "123412******1234", paymentRequestDto.ExpiryDate, money, acquiringBankId, PaymentStatus.Approved)));
+                .Returns(Task.FromResult(new Payment(1, "123412******1234", paymentRequestDto.ExpiryDate, money, acquiringBankPaymentId, PaymentStatus.Approved)));
             var paymentFinderSub = Substitute.For<IPaymentFinder>();
             var controller = new PaymentsController(paymentRequestProcessorSub, paymentFinderSub);
 
@@ -41,24 +43,24 @@ namespace PaymentGateway.Tests
             Assert.IsType<OkObjectResult>(response.Result);
             var result = (OkObjectResult)response.Result;
             var value = (PaymentResponseDto)result.Value;
-            Assert.Equal(value.AcquiringBankId, acquiringBankId);
+            Assert.Equal(value.AcquiringBankPaymentId, acquiringBankPaymentId);
             Assert.Equal(value.Status, PaymentStatus.Approved.ToString());
         }
 
         [Fact]
-        public async Task Find_AcquiringBankId_ReturnsPayment()
+        public async Task Find_AcquiringBankPaymentId_ReturnsPayment()
         {
             // Arrange
             var paymentRequestProcessorSub = Substitute.For<IPaymentRequestProcessor>();
             var paymentFinderSub = Substitute.For<IPaymentFinder>();
-            var acquiringBankId = Guid.NewGuid().ToString();
+            var acquiringBankPaymentId = Guid.NewGuid().ToString();
             const string MaskedCardNumber = "123456****1234";
             var expiryDate = DateTime.Now;
-            paymentFinderSub.Find(acquiringBankId).Returns(new Payment(1, MaskedCardNumber, expiryDate, new Money(100, "GBP"), acquiringBankId, PaymentStatus.Denied));
+            paymentFinderSub.Find(acquiringBankPaymentId).Returns(new Payment(1, MaskedCardNumber, expiryDate, new Money(100, "GBP"), acquiringBankPaymentId, PaymentStatus.Denied));
             var controller = new PaymentsController(paymentRequestProcessorSub, paymentFinderSub);
 
             // Act
-            var response = await controller.Find(acquiringBankId);
+            var response = await controller.Find(acquiringBankPaymentId);
 
             // Assert
             Assert.NotNull(response);
@@ -74,17 +76,17 @@ namespace PaymentGateway.Tests
         }
 
         [Fact]
-        public async Task Find_AcquiringBankId_ReturnsNotFound()
+        public async Task Find_AcquiringBankPaymentId_ReturnsNotFound()
         {
             // Arrange
             var paymentRequestProcessorSub = Substitute.For<IPaymentRequestProcessor>();
             var paymentFinderSub = Substitute.For<IPaymentFinder>();
-            var acquiringBankId = Guid.NewGuid().ToString();
-            paymentFinderSub.Find(acquiringBankId).Returns((Payment)null);
+            var acquiringBankPaymentId = Guid.NewGuid().ToString();
+            paymentFinderSub.Find(acquiringBankPaymentId).Returns((Payment)null);
             var controller = new PaymentsController(paymentRequestProcessorSub, paymentFinderSub);
 
             // Act
-            var response = await controller.Find(acquiringBankId);
+            var response = await controller.Find(acquiringBankPaymentId);
 
             // Assert
             Assert.NotNull(response);

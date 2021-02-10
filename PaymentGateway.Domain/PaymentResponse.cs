@@ -2,18 +2,18 @@
 {
     public class PaymentResponse
     {
-        public PaymentResponse(string acquiringBankIdentifier, PaymentStatus status)
+        public PaymentResponse(string acquiringBankPaymentId, PaymentStatus status)
         {
-            if (string.IsNullOrEmpty(acquiringBankIdentifier))
+            if (string.IsNullOrEmpty(acquiringBankPaymentId))
             {
-                throw new System.ArgumentException($"'{nameof(acquiringBankIdentifier)}' cannot be null or empty", nameof(acquiringBankIdentifier));
+                throw new System.ArgumentException($"'{nameof(acquiringBankPaymentId)}' cannot be null or empty", nameof(acquiringBankPaymentId));
             }
 
-            this.AcquiringBankIdentifier = acquiringBankIdentifier;
+            this.AcquiringBankPaymentId = acquiringBankPaymentId;
             this.Status = status;
         }
 
-        public string AcquiringBankIdentifier { get; set; }
+        public string AcquiringBankPaymentId { get; set; }
 
         public PaymentStatus Status { get; set; }
     }

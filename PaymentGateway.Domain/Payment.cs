@@ -4,23 +4,23 @@ namespace PaymentGateway.Domain
 {
     public class Payment
     {
-        public Payment(int id, string maskedCardNumber, DateTime expiryDate, Money money, string acquiringBankIdentifier, PaymentStatus status)
+        public Payment(int id, string maskedCardNumber, DateTime expiryDate, Money money, string acquiringBankPaymentId, PaymentStatus status)
         {
             if (string.IsNullOrEmpty(maskedCardNumber))
             {
                 throw new ArgumentException($"'{nameof(maskedCardNumber)}' cannot be null or empty", nameof(maskedCardNumber));
             }
 
-            if (string.IsNullOrEmpty(acquiringBankIdentifier))
+            if (string.IsNullOrEmpty(acquiringBankPaymentId))
             {
-                throw new ArgumentException($"'{nameof(acquiringBankIdentifier)}' cannot be null or empty", nameof(acquiringBankIdentifier));
+                throw new ArgumentException($"'{nameof(acquiringBankPaymentId)}' cannot be null or empty", nameof(acquiringBankPaymentId));
             }
 
             this.Id = id;
             this.MaskedCardNumber = maskedCardNumber;
             this.ExpiryDate = expiryDate;
             this.Money = money ?? throw new ArgumentNullException(nameof(money));
-            this.AcquiringBankIdentifier = acquiringBankIdentifier;
+            this.AcquiringBankPaymentId = acquiringBankPaymentId;
             this.Status = status;
         }
 
@@ -32,7 +32,7 @@ namespace PaymentGateway.Domain
 
         public Money Money { get; }
 
-        public string AcquiringBankIdentifier { get; }
+        public string AcquiringBankPaymentId { get; }
 
         public PaymentStatus Status { get; }
     }

@@ -4,18 +4,18 @@ using System.Threading.Tasks;
 
 namespace PaymentGateway.Domain
 {
-    public class PaymentFinder : IPaymentFinder
+    public class MerchantFinder : IMerchantFinder
     {
         private readonly IMediator mediator;
 
-        public PaymentFinder(IMediator mediator)
+        public MerchantFinder(IMediator mediator)
         {
             this.mediator = mediator;
         }
 
-        public async Task<Payment> Find(string acquiringBankPaymentId)
+        public async Task<Merchant> Find(int id)
         {
-            return await this.mediator.Send(new FindPayment(acquiringBankPaymentId));
+            return await this.mediator.Send(new FindMerchant(id));
         }
     }
 }
