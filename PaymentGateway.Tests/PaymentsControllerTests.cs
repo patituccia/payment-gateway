@@ -54,7 +54,7 @@ namespace PaymentGateway.Tests
             var paymentRequestProcessorSub = Substitute.For<IPaymentRequestProcessor>();
             var paymentFinderSub = Substitute.For<IPaymentFinder>();
             var acquiringBankPaymentId = Guid.NewGuid().ToString();
-            const string MaskedCardNumber = "123456****1234";
+            const string MaskedCardNumber = "123456******1234";
             var expiryDate = DateTime.Now;
             paymentFinderSub.Find(acquiringBankPaymentId).Returns(new Payment(1, MaskedCardNumber, expiryDate, new Money(100, "GBP"), acquiringBankPaymentId, PaymentStatus.Denied));
             var controller = new PaymentsController(paymentRequestProcessorSub, paymentFinderSub);

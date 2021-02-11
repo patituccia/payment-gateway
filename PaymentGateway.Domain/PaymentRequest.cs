@@ -10,6 +10,8 @@ namespace PaymentGateway.Domain
     {
         private static Regex CardNumberRegex = new Regex(@"\d{16}");
 
+        private static Regex CvvRegex = new Regex(@"^[0-9]{3,4}$");
+
         public PaymentRequest(int merchantId, string cardHolderName, string cardNumber, DateTime expiryDate, Money money, string cVV)
         {
             if (string.IsNullOrEmpty(cardHolderName))
@@ -31,7 +33,12 @@ namespace PaymentGateway.Domain
             var sanitisedCardNumber = cardNumber.Replace(" ", string.Empty);
             if (!CardNumberRegex.IsMatch(sanitisedCardNumber))
             {
-                throw new ArgumentException("Card number is invalid.", "cardNumber");
+                throw new ArgumentException("Card number is invalid.", nameof(cardNumber));
+            }
+
+            if (!CvvRegex.IsMatch(cVV))
+            {
+                throw new ArgumentException("CVV is invalid.", nameof(cVV));
             }
 
             this.MerchantId = merchantId;
@@ -54,6 +61,6 @@ namespace PaymentGateway.Domain
 
         public string CVV { get; }
 
-        public bool IsProcessed { get; internal set; } = false;
+        public bool IsProcessed { get; internal set; }
     }
 }
