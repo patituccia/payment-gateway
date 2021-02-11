@@ -7,6 +7,7 @@ using Microsoft.Extensions.Hosting;
 using PaymentGateway.AcquiringBank.Mock;
 using PaymentGateway.Domain;
 using PaymentGateway.Persistence.Mock;
+using Serilog;
 
 namespace PaymentGateway
 {
@@ -51,6 +52,8 @@ namespace PaymentGateway
             {
                 app.UseDeveloperExceptionPage();
             }
+
+            app.UseSerilogRequestLogging();
 
             app.UseHttpsRedirection();
 
