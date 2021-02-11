@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace PaymentGateway.Models
 {
@@ -9,5 +10,8 @@ namespace PaymentGateway.Models
 
         [Required]
         public string Status { get; set; }
+
+        [Required]
+        public DateTime Timestamp { get; set; }
     }
 }

@@ -4,7 +4,13 @@ namespace PaymentGateway.Domain
 {
     public class Payment
     {
-        public Payment(int id, string maskedCardNumber, DateTime expiryDate, Money money, string acquiringBankPaymentId, PaymentStatus status)
+        public Payment(int id,
+                       string maskedCardNumber,
+                       DateTime expiryDate,
+                       Money money,
+                       string acquiringBankPaymentId,
+                       PaymentStatus status,
+                       DateTime timestamp)
         {
             if (string.IsNullOrEmpty(maskedCardNumber))
             {
@@ -22,6 +28,7 @@ namespace PaymentGateway.Domain
             this.Money = money ?? throw new ArgumentNullException(nameof(money));
             this.AcquiringBankPaymentId = acquiringBankPaymentId;
             this.Status = status;
+            this.Timestamp = timestamp;
         }
 
         public int Id { get; }
@@ -35,5 +42,7 @@ namespace PaymentGateway.Domain
         public string AcquiringBankPaymentId { get; }
 
         public PaymentStatus Status { get; }
+
+        public DateTime Timestamp { get; }
     }
 }

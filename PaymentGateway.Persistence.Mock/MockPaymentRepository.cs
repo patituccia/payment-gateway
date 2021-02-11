@@ -33,7 +33,8 @@ namespace PaymentGateway.Persistence.Mock
                                       request.Request.ExpiryDate,
                                       request.Request.Money,
                                       request.Response.AcquiringBankPaymentId,
-                                      request.Response.Status);
+                                      request.Response.Status,
+                                      request.Response.Timestamp);
 
             if (!PaymentDb.TryAdd(request.Response.AcquiringBankPaymentId, payment))
             {

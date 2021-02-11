@@ -19,7 +19,7 @@ namespace PaymentGateway.AcquiringBank.Mock
 
             await Task.Delay(delayGenerator.Next(100, 1000));
 
-            return new PaymentResponse(Guid.NewGuid().ToString(), status);
+            return new PaymentResponse(Guid.NewGuid().ToString(), status, DateTime.Now);
         }
     }
 }

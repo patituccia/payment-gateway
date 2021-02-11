@@ -1,8 +1,10 @@
-﻿namespace PaymentGateway.Domain
+﻿using System;
+
+namespace PaymentGateway.Domain
 {
     public class PaymentResponse
     {
-        public PaymentResponse(string acquiringBankPaymentId, PaymentStatus status)
+        public PaymentResponse(string acquiringBankPaymentId, PaymentStatus status, DateTime timestamp)
         {
             if (string.IsNullOrEmpty(acquiringBankPaymentId))
             {
@@ -11,10 +13,13 @@
 
             this.AcquiringBankPaymentId = acquiringBankPaymentId;
             this.Status = status;
+            this.Timestamp = timestamp;
         }
 
-        public string AcquiringBankPaymentId { get; set; }
+        public string AcquiringBankPaymentId { get; }
 
-        public PaymentStatus Status { get; set; }
+        public PaymentStatus Status { get; }
+
+        public DateTime Timestamp { get; }
     }
 }

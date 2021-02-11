@@ -35,7 +35,12 @@ namespace PaymentGateway.Controllers
 
             var payment = await paymentRequestProcessor.Process(paymentRequest);
 
-            var result = new PaymentResponseDto { AcquiringBankPaymentId = payment.AcquiringBankPaymentId, Status = payment.Status.ToString() };
+            var result = new PaymentResponseDto
+            {
+                AcquiringBankPaymentId = payment.AcquiringBankPaymentId,
+                Status = payment.Status.ToString(),
+                Timestamp = payment.Timestamp
+            };
 
             return this.Ok(result);
         }
@@ -56,7 +61,8 @@ namespace PaymentGateway.Controllers
                 Amount = payment.Money.Amount,
                 Currency = payment.Money.Currency,
                 ExpiryDate = payment.ExpiryDate,
-                Status = payment.Status.ToString()
+                Status = payment.Status.ToString(),
+                Timestamp = payment.Timestamp
             };
 
             return this.Ok(result);

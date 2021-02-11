@@ -21,6 +21,7 @@ namespace PaymentGateway.Domain.Tests
             const string MaskedCardNumber = "123456******1234";
             var amount = 100M;
             var currency = "GBP";
+            var timestamp = DateTime.Now;
             mediator
                 .Send(Arg.Is<FindPayment>(f => f.AcquiringPaymentBankId == acquitingBankPaymentId))
                 .Returns(new Payment(
@@ -29,7 +30,8 @@ namespace PaymentGateway.Domain.Tests
                     time,
                     new Money(amount, currency),
                     acquitingBankPaymentId,
-                    PaymentStatus.Approved));
+                    PaymentStatus.Approved,
+                    timestamp));
             var merchantFinder = new PaymentFinder(mediator);
 
             // Act
@@ -43,6 +45,7 @@ namespace PaymentGateway.Domain.Tests
             result.Money.Currency.Should().Be(currency);
             result.AcquiringBankPaymentId.Should().Be(acquitingBankPaymentId);
             result.Status.Should().Be(PaymentStatus.Approved);
+            result.Timestamp.Should().Be(timestamp);
         }
     }
 }

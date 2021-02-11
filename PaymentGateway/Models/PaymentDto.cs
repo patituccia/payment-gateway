@@ -22,5 +22,8 @@ namespace PaymentGateway.Models
 
         [Required]        
         public string Status { get; set; }
+
+        [Required]
+        public DateTime Timestamp { get; set; }
     }
 }

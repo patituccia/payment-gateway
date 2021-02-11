@@ -20,9 +20,10 @@ namespace PaymentGateway.Domain.Tests
             var dateTime = DateTime.Now;
             var money = new Money(100M, "GBP");
             var maskedCardNumber = "123412******1234";
+            var timestamp = DateTime.Now;
             var paymentRequest = new PaymentRequest(1, "John Smith", "1234 1234 1234 1234", dateTime, money, "123");
-            var paymentResponse = new PaymentResponse(acquiringBankPaymentId, PaymentStatus.Approved);
-            var payment = new Payment(1, maskedCardNumber, dateTime, money, acquiringBankPaymentId, PaymentStatus.Approved);
+            var paymentResponse = new PaymentResponse(acquiringBankPaymentId, PaymentStatus.Approved, timestamp);
+            var payment = new Payment(1, maskedCardNumber, dateTime, money, acquiringBankPaymentId, PaymentStatus.Approved, timestamp);
             acquiringBank.Process(Arg.Is<PaymentRequest>(pr => pr.CardNumber == "1234123412341234" && pr.CVV == "123")).Returns(paymentResponse);
             mediator
                 .Send(Arg.Is<FindMerchant>(f => f.Id == 1))
@@ -43,6 +44,7 @@ namespace PaymentGateway.Domain.Tests
             result.Money.Currency.Should().Be(money.Currency);
             result.AcquiringBankPaymentId.Should().Be(acquiringBankPaymentId);
             result.Status.Should().Be(PaymentStatus.Approved);
+            result.Timestamp.Should().Be(timestamp);
         }
 
         [Fact]
