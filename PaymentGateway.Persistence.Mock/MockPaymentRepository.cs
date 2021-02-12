@@ -29,6 +29,8 @@ namespace PaymentGateway.Persistence.Mock
             var maskedCardNumber = CardNumber.Replace(request.Request.CardNumber, @"$1******$3");
 
             var payment = new Payment(this.GetNextPaymentId(),
+                                      request.Request.MerchantId,
+                                      request.Request.CardHolderName,
                                       maskedCardNumber,
                                       request.Request.ExpiryDate,
                                       request.Request.Money,

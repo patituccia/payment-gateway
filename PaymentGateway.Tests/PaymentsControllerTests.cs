@@ -31,7 +31,15 @@ namespace PaymentGateway.Tests
             var timestamp = DateTime.Now;
             paymentRequestProcessorSub
                 .Process(Arg.Is<PaymentRequest>(p => p.CardNumber == paymentRequestDto.CardNumber.Replace(" ", string.Empty)))
-                .Returns(Task.FromResult(new Payment(1, "123412******1234", paymentRequestDto.ExpiryDate, money, acquiringBankPaymentId, PaymentStatus.Approved, timestamp)));
+                .Returns(Task.FromResult(new Payment(1,
+                                                     100,
+                                                     "John Smith",
+                                                     "123412******1234",
+                                                     paymentRequestDto.ExpiryDate,
+                                                     money,
+                                                     acquiringBankPaymentId,
+                                                     PaymentStatus.Approved,
+                                                     timestamp)));
             var paymentFinderSub = Substitute.For<IPaymentFinder>();
             var controller = new PaymentsController(paymentRequestProcessorSub, paymentFinderSub);
 
@@ -59,7 +67,18 @@ namespace PaymentGateway.Tests
             var timestamp = DateTime.Now;
             const string MaskedCardNumber = "123456******1234";
             var expiryDate = DateTime.Now;
-            paymentFinderSub.Find(acquiringBankPaymentId).Returns(new Payment(1, MaskedCardNumber, expiryDate, new Money(100, "GBP"), acquiringBankPaymentId, PaymentStatus.Denied, timestamp));
+            const string cardHolderName = "John Smith";
+            paymentFinderSub
+                .Find(acquiringBankPaymentId)
+                .Returns(new Payment(1,
+                                     100,
+                                     cardHolderName,
+                                     MaskedCardNumber,
+                                     expiryDate,
+                                     new Money(100, "GBP"),
+                                     acquiringBankPaymentId,
+                                     PaymentStatus.Denied,
+                                     timestamp));
             var controller = new PaymentsController(paymentRequestProcessorSub, paymentFinderSub);
 
             // Act
@@ -71,6 +90,9 @@ namespace PaymentGateway.Tests
             Assert.IsType<OkObjectResult>(response.Result);
             var result = (OkObjectResult)response.Result;
             var value = (PaymentDto)result.Value;
+            Assert.Equal(1, value.Id);
+            Assert.Equal(100, value.MerchantId);
+            Assert.Equal(cardHolderName, value.CardHolderName);
             Assert.Equal(MaskedCardNumber, value.MaskedCardNumber);
             Assert.Equal(expiryDate, value.ExpiryDate);
             Assert.Equal(100M, value.Amount);

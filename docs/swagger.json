@@ -71,14 +71,31 @@
       "PaymentDto": {
         "required": [
           "amount",
+          "cardHolderName",
           "currency",
           "expiryDate",
+          "id",
           "maskedCardNumber",
+          "merchantId",
           "status",
           "timestamp"
         ],
         "type": "object",
         "properties": {
+          "id": {
+            "type": "integer",
+            "description": "Payment id.",
+            "format": "int32"
+          },
+          "merchantId": {
+            "type": "integer",
+            "description": "The id of the merchant that requested this payment.",
+            "format": "int32"
+          },
+          "cardHolderName": {
+            "type": "string",
+            "description": "The card holder name."
+          },
           "maskedCardNumber": {
             "type": "string",
             "description": "The masked number of the card used in the payment.\r\nMasking as per PCI (https://security.stackexchange.com/a/145079)"

@@ -5,6 +5,8 @@ namespace PaymentGateway.Domain
     public class Payment
     {
         public Payment(int id,
+                       int merchantId,
+                       string cardHolderName,
                        string maskedCardNumber,
                        DateTime expiryDate,
                        Money money,
@@ -12,6 +14,11 @@ namespace PaymentGateway.Domain
                        PaymentStatus status,
                        DateTime timestamp)
         {
+            if (string.IsNullOrEmpty(cardHolderName))
+            {
+                throw new ArgumentException($"'{nameof(cardHolderName)}' cannot be null or empty", nameof(cardHolderName));
+            }
+
             if (string.IsNullOrEmpty(maskedCardNumber))
             {
                 throw new ArgumentException($"'{nameof(maskedCardNumber)}' cannot be null or empty", nameof(maskedCardNumber));
@@ -23,6 +30,8 @@ namespace PaymentGateway.Domain
             }
 
             this.Id = id;
+            this.MerchantId = merchantId;
+            this.CardHolderName = cardHolderName;
             this.MaskedCardNumber = maskedCardNumber;
             this.ExpiryDate = expiryDate;
             this.Money = money ?? throw new ArgumentNullException(nameof(money));
@@ -32,6 +41,10 @@ namespace PaymentGateway.Domain
         }
 
         public int Id { get; }
+
+        public int MerchantId { get; }
+
+        public string CardHolderName { get; }
 
         public string MaskedCardNumber { get; }
 

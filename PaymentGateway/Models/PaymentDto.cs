@@ -9,6 +9,24 @@ namespace PaymentGateway.Models
     public class PaymentDto
     {
         /// <summary>
+        /// Payment id.
+        /// </summary>
+        [Required]
+        public int Id { get; set; }
+
+        /// <summary>
+        /// The id of the merchant that requested this payment.
+        /// </summary>
+        [Required]
+        public int MerchantId { get; set; }
+
+        /// <summary>
+        /// The card holder name.
+        /// </summary>
+        [Required]
+        public string CardHolderName { get; set; }
+
+        /// <summary>
         /// The masked number of the card used in the payment.
         /// Masking as per PCI (https://security.stackexchange.com/a/145079)
         /// </summary>

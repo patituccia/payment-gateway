@@ -70,6 +70,9 @@ namespace PaymentGateway.Controllers
 
             var result = new PaymentDto
             {
+                Id = payment.Id,
+                MerchantId = payment.MerchantId,
+                CardHolderName = payment.CardHolderName,
                 MaskedCardNumber = payment.MaskedCardNumber,
                 Amount = payment.Money.Amount,
                 Currency = payment.Money.Currency,

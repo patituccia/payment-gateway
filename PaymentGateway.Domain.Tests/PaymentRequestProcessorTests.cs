@@ -19,11 +19,21 @@ namespace PaymentGateway.Domain.Tests
             var acquiringBankPaymentId = Guid.NewGuid().ToString();
             var dateTime = DateTime.Now;
             var money = new Money(100M, "GBP");
-            var maskedCardNumber = "123412******1234";
+            const string cardHolderName = "John Smith";
+            const string maskedCardNumber = "123412******1234";
             var timestamp = DateTime.Now;
             var paymentRequest = new PaymentRequest(1, "John Smith", "1234 1234 1234 1234", dateTime, money, "123");
             var paymentResponse = new PaymentResponse(acquiringBankPaymentId, PaymentStatus.Approved, timestamp);
-            var payment = new Payment(1, maskedCardNumber, dateTime, money, acquiringBankPaymentId, PaymentStatus.Approved, timestamp);
+            var payment = new Payment(
+                1,
+                100,
+                cardHolderName,
+                maskedCardNumber,
+                dateTime,
+                money,
+                acquiringBankPaymentId,
+                PaymentStatus.Approved,
+                timestamp);
             acquiringBank.Process(Arg.Is<PaymentRequest>(pr => pr.CardNumber == "1234123412341234" && pr.CVV == "123")).Returns(paymentResponse);
             mediator
                 .Send(Arg.Is<FindMerchant>(f => f.Id == 1))
@@ -38,6 +48,8 @@ namespace PaymentGateway.Domain.Tests
 
             // Assert
             result.Id.Should().Be(1);
+            result.MerchantId.Should().Be(100);
+            result.CardHolderName.Should().Be(cardHolderName);
             result.MaskedCardNumber.Should().Be(maskedCardNumber);
             result.ExpiryDate.Should().Be(dateTime);
             result.Money.Amount.Should().Be(money.Amount);

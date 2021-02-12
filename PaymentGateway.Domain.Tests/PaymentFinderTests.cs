@@ -18,6 +18,7 @@ namespace PaymentGateway.Domain.Tests
             var mediator = Substitute.For<IMediator>();
             var acquitingBankPaymentId = Guid.NewGuid().ToString();
             var time = DateTime.Now;
+            const string cardHolderName = "John Smith";
             const string MaskedCardNumber = "123456******1234";
             var amount = 100M;
             var currency = "GBP";
@@ -26,6 +27,8 @@ namespace PaymentGateway.Domain.Tests
                 .Send(Arg.Is<FindPayment>(f => f.AcquiringPaymentBankId == acquitingBankPaymentId))
                 .Returns(new Payment(
                     1,
+                    100,
+                    cardHolderName,
                     MaskedCardNumber,
                     time,
                     new Money(amount, currency),
@@ -39,6 +42,8 @@ namespace PaymentGateway.Domain.Tests
 
             // Assert
             result.Id.Should().Be(1);
+            result.MerchantId.Should().Be(100);
+            result.CardHolderName.Should().Be(cardHolderName);
             result.MaskedCardNumber.Should().Be(MaskedCardNumber);
             result.ExpiryDate.Should().Be(time);
             result.Money.Amount.Should().Be(amount);
