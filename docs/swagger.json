@@ -1,21 +1,19 @@
 {
   "openapi": "3.0.1",
   "info": {
-    "title": "PaymentGateway",
-    "version": "1.0"
+    "title": "Payment Gateway API",
+    "description": "A sample Payment Gateway API microservice. It allows merchants to submit payment requests which are processed via acquiring banks on their behalf. Previously made payments can be retrieved using the acquiring bank unique payment id.",
+    "version": "v1"
   },
-  "servers": [
-    {
-      "url": "https://localhost:5001"
-    }
-  ],
   "paths": {
     "/api/Payments": {
       "post": {
         "tags": [
           "Payments"
         ],
+        "summary": "Processes a payment request via the corresponding acquiring bank on behalf of the merchant.",
         "requestBody": {
+          "description": "The payment request.",
           "content": {
             "application/json": {
               "schema": {
@@ -41,10 +39,12 @@
         "tags": [
           "Payments"
         ],
+        "summary": "Finds a previously processed payment.",
         "parameters": [
           {
             "name": "acquiringBankPaymentId",
             "in": "query",
+            "description": "The acquiring bank unique payment id.",
             "required": true,
             "schema": {
               "type": "string"
@@ -80,29 +80,36 @@
         "type": "object",
         "properties": {
           "maskedCardNumber": {
-            "type": "string"
+            "type": "string",
+            "description": "The masked number of the card used in the payment.\r\nMasking as per PCI (https://security.stackexchange.com/a/145079)"
           },
           "expiryDate": {
             "type": "string",
+            "description": "The expiry date of the card.",
             "format": "date-time"
           },
           "amount": {
             "type": "number",
+            "description": "The amount of the payment.",
             "format": "currency"
           },
           "currency": {
             "pattern": "^[A-Z]{3}$",
-            "type": "string"
+            "type": "string",
+            "description": "The ISO 4217 currency code of the payment."
           },
           "status": {
-            "type": "string"
+            "type": "string",
+            "description": "Status of the payment - either Approved or Denied."
           },
           "timestamp": {
             "type": "string",
+            "description": "Timestamp of when the payment was processed by the acquiring bank.",
             "format": "date-time"
           }
         },
-        "additionalProperties": false
+        "additionalProperties": false,
+        "description": "Represents a payment processed by the gateway and stored for later retrieval."
       },
       "PaymentRequestDto": {
         "required": [
@@ -120,33 +127,41 @@
             "maximum": 2147483647,
             "minimum": 0,
             "type": "integer",
+            "description": "The payment gateway's merchant id.",
             "format": "int32"
           },
           "cardHolderName": {
-            "type": "string"
+            "type": "string",
+            "description": "The card holder name."
           },
           "cardNumber": {
             "type": "string",
+            "description": "A valid credit card number.",
             "format": "credit-card"
           },
           "expiryDate": {
             "type": "string",
+            "description": "The credit card expiry date.",
             "format": "date-time"
           },
           "amount": {
             "type": "number",
+            "description": "The payment amount.",
             "format": "currency"
           },
           "currency": {
             "pattern": "^[A-Z]{3}$",
-            "type": "string"
+            "type": "string",
+            "description": "The ISO 4217 currency code."
           },
           "cvv": {
             "pattern": "^[0-9]{3,4}$",
-            "type": "string"
+            "type": "string",
+            "description": "The credit card CVV number."
           }
         },
-        "additionalProperties": false
+        "additionalProperties": false,
+        "description": "Represents a payment request to be issued to an aquiring bank on behalf of a merchant."
       },
       "PaymentResponseDto": {
         "required": [
@@ -157,17 +172,21 @@
         "type": "object",
         "properties": {
           "acquiringBankPaymentId": {
-            "type": "string"
+            "type": "string",
+            "description": "The unique acquiring bank payment id."
           },
           "status": {
-            "type": "string"
+            "type": "string",
+            "description": "The payment status - either Approved or Denied."
           },
           "timestamp": {
             "type": "string",
+            "description": "The date and time when the payment was processed.",
             "format": "date-time"
           }
         },
-        "additionalProperties": false
+        "additionalProperties": false,
+        "description": "Represents a payment response issued by an acquiring bank."
       }
     }
   }

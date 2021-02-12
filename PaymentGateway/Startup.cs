@@ -8,6 +8,9 @@ using PaymentGateway.AcquiringBank.Mock;
 using PaymentGateway.Domain;
 using PaymentGateway.Persistence.Mock;
 using Serilog;
+using System;
+using System.IO;
+using System.Reflection;
 
 namespace PaymentGateway
 {
@@ -28,7 +31,22 @@ namespace PaymentGateway
             services.AddMediatR(typeof(IPaymentRequestProcessor));
             services.AddMediatR(typeof(MockPaymentRepository));
 
-            services.AddSwaggerGen();
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo
+                {
+                    Version = "v1",
+                    Title = "Payment Gateway API",
+                    Description = "A sample Payment Gateway API microservice. It allows merchants to submit payment requests which are processed " +
+                    "via acquiring banks on their behalf. " +
+                    "Previously made payments can be retrieved using the acquiring bank unique payment id."
+                });
+
+                // Set the comments path for the Swagger JSON and UI.
+                var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+                var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+                c.IncludeXmlComments(xmlPath);
+            });
 
             /// Application DI settings
             services.AddPaymentGatewayDomain();

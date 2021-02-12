@@ -7,6 +7,9 @@ using System.Threading.Tasks;
 
 namespace PaymentGateway.Controllers
 {
+    /// <summary>
+    /// API for requesting payments to be processed and later retrieved.
+    /// </summary>
     [Produces(MediaTypeNames.Application.Json)]
     [Consumes(MediaTypeNames.Application.Json)]
     [Route("api/[controller]")]
@@ -22,6 +25,11 @@ namespace PaymentGateway.Controllers
             this.paymentFinder = paymentFinder;
         }
 
+        /// <summary>
+        /// Processes a payment request via the corresponding acquiring bank on behalf of the merchant.
+        /// </summary>
+        /// <param name="paymentRequestDto">The payment request.</param>
+        /// <returns>The payment response including the acquiring bank payment id an whether it was approved or denied.</returns>
         [HttpPost]
         public async Task<ActionResult<PaymentResponseDto>> Process(PaymentRequestDto paymentRequestDto)
         {
@@ -45,6 +53,11 @@ namespace PaymentGateway.Controllers
             return this.Ok(result);
         }
 
+        /// <summary>
+        /// Finds a previously processed payment.
+        /// </summary>
+        /// <param name="acquiringBankPaymentId">The acquiring bank unique payment id.</param>
+        /// <returns>The payment (if found).</returns>
         [HttpGet]
         public async Task<ActionResult<PaymentDto>> Find([Required]string acquiringBankPaymentId)
         {
