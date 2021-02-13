@@ -7,13 +7,10 @@ EXPOSE 443
 
 FROM mcr.microsoft.com/dotnet/core/sdk:3.1-buster AS build
 WORKDIR /src
-COPY ["PaymentGateway/PaymentGateway.csproj", "PaymentGateway/"]
-COPY ["PaymentGateway.Domain/PaymentGateway.Domain.csproj", "PaymentGateway.Domain/"]
-COPY ["PaymentGateway.Persistence.Mock/PaymentGateway.Persistence.Mock.csproj", "PaymentGateway.Persistence.Mock/"]
-COPY ["PaymentGateway.AcquiringBank.Mock/PaymentGateway.AcquiringBank.Mock.csproj", "PaymentGateway.AcquiringBank.Mock/"]
-RUN dotnet restore "PaymentGateway/PaymentGateway.csproj"
+COPY ["PaymentGateway.csproj", ""]
+RUN dotnet restore "./PaymentGateway.csproj"
 COPY . .
-WORKDIR "/src/PaymentGateway"
+WORKDIR "/src/."
 RUN dotnet build "PaymentGateway.csproj" -c Release -o /app/build
 
 FROM build AS publish

@@ -1,0 +1,13 @@
+version: '3.4'
+
+services:
+  paymentgateway:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:80
+    ports:
+      - "80"
+    image: ${DOCKER_REGISTRY-}paymentgateway
+    build:
+      context: .
+      dockerfile: PaymentGateway/Dockerfile
