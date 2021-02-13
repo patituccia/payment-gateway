@@ -7,11 +7,13 @@ acquiring bank (mocked), and store historical payments done through the gateway.
 
 The Open API (Swagger) documentation is available [here](https://patituccia.github.io/payment-gateway)
 
-## Visual Studio
+## How to Run
+
+### Visual Studio
 
 Solution was created on Visual Studio 2019 and should be runnable with any of the debugging profiles.
 
-## Docker
+### Docker
 
 First build the image.
 ```
