@@ -5,6 +5,11 @@
     "description": "A sample Payment Gateway API microservice. It allows merchants to submit payment requests which are processed via acquiring banks on their behalf. Previously made payments can be retrieved using the acquiring bank unique payment id.",
     "version": "v1"
   },
+  "servers": [
+    {
+      "url": "https://localhost:5001"
+    }
+  ],
   "paths": {
     "/api/Payments": {
       "post": {
@@ -41,6 +46,16 @@
         ],
         "summary": "Finds a previously processed payment.",
         "parameters": [
+          {
+            "name": "merchantId",
+            "in": "query",
+            "description": "The merchant id.",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
           {
             "name": "acquiringBankPaymentId",
             "in": "query",

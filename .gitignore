@@ -338,3 +338,6 @@ ASALocalRun/
 
 # BeatPulse healthcheck temp database
 healthchecksdb
+/PaymentGateway/paymentGateway.db-wal
+/PaymentGateway/paymentGateway.db-shm
+/PaymentGateway/paymentGateway.db

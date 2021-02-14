@@ -56,12 +56,13 @@ namespace PaymentGateway.Controllers
         /// <summary>
         /// Finds a previously processed payment.
         /// </summary>
+        /// <param name="merchantId">The merchant id.</param>
         /// <param name="acquiringBankPaymentId">The acquiring bank unique payment id.</param>
         /// <returns>The payment (if found).</returns>
         [HttpGet]
-        public async Task<ActionResult<PaymentDto>> Find([Required]string acquiringBankPaymentId)
+        public async Task<ActionResult<PaymentDto>> Find([Required]int merchantId, [Required]string acquiringBankPaymentId)
         {
-            var payment = await this.paymentFinder.Find(acquiringBankPaymentId);
+            var payment = await this.paymentFinder.Find(merchantId, acquiringBankPaymentId);
 
             if (payment == null)
             {

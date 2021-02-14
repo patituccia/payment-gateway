@@ -4,6 +4,10 @@ namespace PaymentGateway.Domain
 {
     public class Payment
     {
+        private Payment()
+        {
+        }
+
         public Payment(int id,
                        int merchantId,
                        string cardHolderName,
@@ -40,22 +44,22 @@ namespace PaymentGateway.Domain
             this.Timestamp = timestamp;
         }
 
-        public int Id { get; }
+        public int Id { get; private set; }
 
-        public int MerchantId { get; }
+        public int MerchantId { get; private set; }
 
-        public string CardHolderName { get; }
+        public string CardHolderName { get; private set; }
 
-        public string MaskedCardNumber { get; }
+        public string MaskedCardNumber { get; private set; }
 
-        public DateTime ExpiryDate { get; }
+        public DateTime ExpiryDate { get; private set; }
 
-        public Money Money { get; }
+        public Money Money { get; private set; }
 
-        public string AcquiringBankPaymentId { get; }
+        public string AcquiringBankPaymentId { get; private set; }
 
-        public PaymentStatus Status { get; }
+        public PaymentStatus Status { get; private set; }
 
-        public DateTime Timestamp { get; }
+        public DateTime Timestamp { get; private set; }
     }
 }

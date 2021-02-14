@@ -13,9 +13,9 @@ namespace PaymentGateway.Domain
             this.mediator = mediator;
         }
 
-        public async Task<Payment> Find(string acquiringBankPaymentId)
+        public async Task<Payment> Find(int merchantId, string acquiringBankPaymentId)
         {
-            return await this.mediator.Send(new FindPayment(acquiringBankPaymentId));
+            return await this.mediator.Send(new FindPayment(merchantId, acquiringBankPaymentId));
         }
     }
 }

@@ -6,7 +6,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using PaymentGateway.AcquiringBank.Mock;
 using PaymentGateway.Domain;
-using PaymentGateway.Persistence.Mock;
+////using PaymentGateway.Persistence.Mock;
+using PaymentGateway.Persistence.SqlLite;
 using Serilog;
 using System;
 using System.IO;
@@ -29,7 +30,8 @@ namespace PaymentGateway
             services.AddControllers();
 
             services.AddMediatR(typeof(IPaymentRequestProcessor));
-            services.AddMediatR(typeof(MockPaymentRepository));
+            //services.AddMediatR(typeof(MockPaymentRepository));
+            services.AddMediatR(typeof(PaymentRepository));
 
             services.AddSwaggerGen(c =>
             {
@@ -48,7 +50,7 @@ namespace PaymentGateway
                 c.IncludeXmlComments(xmlPath);
             });
 
-            /// Application DI settings
+            // Application DI settings
             services.AddPaymentGatewayDomain();
             services.AddScoped<IAcquiringBank, MockBank>();
         }

@@ -69,7 +69,7 @@ namespace PaymentGateway.Tests
             var expiryDate = DateTime.Now;
             const string cardHolderName = "John Smith";
             paymentFinderSub
-                .Find(acquiringBankPaymentId)
+                .Find(100, acquiringBankPaymentId)
                 .Returns(new Payment(1,
                                      100,
                                      cardHolderName,
@@ -82,7 +82,7 @@ namespace PaymentGateway.Tests
             var controller = new PaymentsController(paymentRequestProcessorSub, paymentFinderSub);
 
             // Act
-            var response = await controller.Find(acquiringBankPaymentId);
+            var response = await controller.Find(100, acquiringBankPaymentId);
 
             // Assert
             Assert.NotNull(response);
@@ -108,11 +108,11 @@ namespace PaymentGateway.Tests
             var paymentRequestProcessorSub = Substitute.For<IPaymentRequestProcessor>();
             var paymentFinderSub = Substitute.For<IPaymentFinder>();
             var acquiringBankPaymentId = Guid.NewGuid().ToString();
-            paymentFinderSub.Find(acquiringBankPaymentId).Returns((Payment)null);
+            paymentFinderSub.Find(100, acquiringBankPaymentId).Returns((Payment)null);
             var controller = new PaymentsController(paymentRequestProcessorSub, paymentFinderSub);
 
             // Act
-            var response = await controller.Find(acquiringBankPaymentId);
+            var response = await controller.Find(100, acquiringBankPaymentId);
 
             // Assert
             Assert.NotNull(response);

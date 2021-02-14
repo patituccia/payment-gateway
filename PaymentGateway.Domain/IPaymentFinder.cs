@@ -4,6 +4,6 @@ namespace PaymentGateway.Domain
 {
     public interface IPaymentFinder
     {
-        Task<Payment> Find(string acquiringBankPaymentId);
+        Task<Payment> Find(int merchantId, string acquiringBankPaymentId);
     }
 }

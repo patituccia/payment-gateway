@@ -10,15 +10,18 @@ namespace PaymentGateway.Domain.Events
     /// </remarks>
     public class FindPayment : IRequest<Payment>
     {
-        public FindPayment(string acquiringBankPaymentId)
+        public FindPayment(int merchantId, string acquiringBankPaymentId)
         {
             if (string.IsNullOrEmpty(acquiringBankPaymentId))
             {
                 throw new System.ArgumentException($"'{nameof(acquiringBankPaymentId)}' cannot be null or empty", nameof(acquiringBankPaymentId));
             }
 
+            this.MerchantId = merchantId;
             this.AcquiringPaymentBankId = acquiringBankPaymentId;
         }
+
+        public int MerchantId { get; }
 
         public string AcquiringPaymentBankId { get; }
     }

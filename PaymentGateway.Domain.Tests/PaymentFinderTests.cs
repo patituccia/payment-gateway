@@ -38,7 +38,7 @@ namespace PaymentGateway.Domain.Tests
             var merchantFinder = new PaymentFinder(mediator);
 
             // Act
-            var result = await merchantFinder.Find(acquitingBankPaymentId);
+            var result = await merchantFinder.Find(100, acquitingBankPaymentId);
 
             // Assert
             result.Id.Should().Be(1);
