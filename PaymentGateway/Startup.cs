@@ -6,8 +6,10 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using PaymentGateway.AcquiringBank.Mock;
 using PaymentGateway.Domain;
+using PaymentGateway.Metrics;
 ////using PaymentGateway.Persistence.Mock;
 using PaymentGateway.Persistence.SqlLite;
+using Prometheus;
 using Serilog;
 using System;
 using System.IO;
@@ -32,6 +34,7 @@ namespace PaymentGateway
             services.AddMediatR(typeof(IPaymentRequestProcessor));
             //services.AddMediatR(typeof(MockPaymentRepository));
             services.AddMediatR(typeof(PaymentRepository));
+            services.AddMediatR(typeof(PaymentMetricsHandler));
 
             services.AddSwaggerGen(c =>
             {
@@ -79,11 +82,14 @@ namespace PaymentGateway
 
             app.UseRouting();
 
+            app.UseHttpMetrics();
+
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+                endpoints.MapMetrics();
             });
         }
     }

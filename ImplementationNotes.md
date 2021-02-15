@@ -41,13 +41,21 @@ The idea is to reduce coupling with the system that will actually carry out thes
 which is referenced in the [Domain events: design and implementation](https://docs.microsoft.com/en-us/dotnet/architecture/microservices/microservice-ddd-cqrs-patterns/domain-events-design-implementation)
 section of the previously mentioned book.
 
+### Tests
+
+I've implemented Unit Tests for the [Controllers](/PaymentGateway.Tests) and [Domain](/PaymentGateway.Domain.Tests) classes 
+using [xUnit](https://xunit.net/), [NSubstitute](https://nsubstitute.github.io/) for mocking, and in the Domain tests I used [Fluent 
+Assertions](https://fluentassertions.com/).
+
+There are no controller integration tests which can be achieved by using a [TestServer](https://docs.microsoft.com/en-us/dotnet/api/microsoft.aspnetcore.testhost.testserver) 
+using the approach [defined here](https://docs.microsoft.com/en-us/aspnet/core/test/integration-tests?view=aspnetcore-3.1).
+
 ## Implemented features
 
 ### Logging
 
-
-
-### Metrics
+I've used [Serilog](https://serilog.net/) for logging instead of the default logging because it supports [message templates](https://messagetemplates.org/)
+which improves machine-readability of log messages.
 
 ### Containerization
 
@@ -56,6 +64,8 @@ section of the previously mentioned book.
 ### Data Storage
 
 ## Non-implemented features
+
+### Metrics
 
 ### Authentication
 
