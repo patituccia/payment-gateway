@@ -32,6 +32,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\PaymentGateway.Metrics\PaymentGateway.Metrics.csproj" />
     <ProjectReference Include="..\PaymentGateway.AcquiringBank.Mock\PaymentGateway.AcquiringBank.Mock.csproj" />
     <ProjectReference Include="..\PaymentGateway.Domain\PaymentGateway.Domain.csproj" />
     <ProjectReference Include="..\PaymentGateway.Metrics\PaymentGateway.Metrics.csproj" />
