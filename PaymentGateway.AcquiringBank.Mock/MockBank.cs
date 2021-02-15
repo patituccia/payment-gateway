@@ -15,9 +15,9 @@ namespace PaymentGateway.AcquiringBank.Mock
                 throw new ArgumentNullException(nameof(request));
             }
 
-            var status = request.CardNumber.StartsWith("1") ? PaymentStatus.Denied : PaymentStatus.Approved;
-
-            await Task.Delay(delayGenerator.Next(100, 1000));
+            var delay = delayGenerator.Next(100, 1000);
+            var status = delay > 800 ? PaymentStatus.Denied : PaymentStatus.Approved;
+            await Task.Delay(delay);
 
             return new PaymentResponse(Guid.NewGuid().ToString(), status, DateTime.Now);
         }
