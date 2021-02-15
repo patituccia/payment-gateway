@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using NSubstitute;
 using PaymentGateway.Controllers;
 using PaymentGateway.Domain;
@@ -15,6 +16,7 @@ namespace PaymentGateway.Tests
         public async Task Process_PaymentRequest_ReturnsPaymentResponse()
         {
             // Arrange
+            var logger = Substitute.For<ILogger<PaymentsController>>();
             var paymentRequestProcessorSub = Substitute.For<IPaymentRequestProcessor>();
             var paymentRequestDto = new PaymentRequestDto
             {
@@ -41,7 +43,7 @@ namespace PaymentGateway.Tests
                                                      PaymentStatus.Approved,
                                                      timestamp)));
             var paymentFinderSub = Substitute.For<IPaymentFinder>();
-            var controller = new PaymentsController(paymentRequestProcessorSub, paymentFinderSub);
+            var controller = new PaymentsController(paymentRequestProcessorSub, paymentFinderSub, logger);
 
             // Act
             var response = await controller.Process(paymentRequestDto);
@@ -61,6 +63,7 @@ namespace PaymentGateway.Tests
         public async Task Find_AcquiringBankPaymentId_ReturnsPayment()
         {
             // Arrange
+            var logger = Substitute.For<ILogger<PaymentsController>>();
             var paymentRequestProcessorSub = Substitute.For<IPaymentRequestProcessor>();
             var paymentFinderSub = Substitute.For<IPaymentFinder>();
             var acquiringBankPaymentId = Guid.NewGuid().ToString();
@@ -79,7 +82,7 @@ namespace PaymentGateway.Tests
                                      acquiringBankPaymentId,
                                      PaymentStatus.Denied,
                                      timestamp));
-            var controller = new PaymentsController(paymentRequestProcessorSub, paymentFinderSub);
+            var controller = new PaymentsController(paymentRequestProcessorSub, paymentFinderSub, logger);
 
             // Act
             var response = await controller.Find(100, acquiringBankPaymentId);
@@ -105,11 +108,12 @@ namespace PaymentGateway.Tests
         public async Task Find_AcquiringBankPaymentId_ReturnsNotFound()
         {
             // Arrange
+            var logger = Substitute.For<ILogger<PaymentsController>>();
             var paymentRequestProcessorSub = Substitute.For<IPaymentRequestProcessor>();
             var paymentFinderSub = Substitute.For<IPaymentFinder>();
             var acquiringBankPaymentId = Guid.NewGuid().ToString();
             paymentFinderSub.Find(100, acquiringBankPaymentId).Returns((Payment)null);
-            var controller = new PaymentsController(paymentRequestProcessorSub, paymentFinderSub);
+            var controller = new PaymentsController(paymentRequestProcessorSub, paymentFinderSub, logger);
 
             // Act
             var response = await controller.Find(100, acquiringBankPaymentId);
